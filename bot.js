@@ -23,13 +23,15 @@ function createBot() {
     username: config.botUsername,
     version: '1.20.1',
     checkTimeoutInterval: 60 * 1000,
-    hideErrors: false
+    // Anti-VPN / Anti-Proxy bypass headers
+    fakeHost: config.serverHost,
+    brand: 'vanilla'
   });
 
   bot.on('spawn', () => {
     console.log('Bot successfully Banana SMP server mein join ho gaya!');
 
-    // Login command delay ke saath taake server spam block na kare
+    // Login command
     setTimeout(() => {
       bot.chat(`/login ${config.password}`);
       console.log('Login command bhej di gayi hai.');
@@ -52,7 +54,6 @@ function createBot() {
       try {
         const items = window.items();
         
-        // Item search
         let targetSlot = -1;
         for (const item of items) {
           if (item && item.name) {
@@ -71,8 +72,7 @@ function createBot() {
           await bot.clickWindow(targetSlot, 0, 0);
           console.log('Lifesteal join click ho gaya!');
         } else {
-          console.log('Red dye automatic nahi mila, default middle slot par click try kar rahe hain...');
-          // Agar item search na mile to middle GUI slot click
+          console.log('Red dye automatic nahi mila, middle slot click try kar rahe hain...');
           if (items.length > 0) {
             await bot.clickWindow(13, 0, 0);
           }
