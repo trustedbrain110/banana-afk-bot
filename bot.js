@@ -2,6 +2,7 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const config = require('./config.json');
 
+// Express Server (Render / UptimeRobot Keep-Alive)
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -18,25 +19,28 @@ function createBot() {
     host: config.serverHost,
     port: config.serverPort,
     username: config.botUsername,
-    version: false
+    version: '1.20.1'
   });
 
   bot.on('spawn', () => {
     console.log('Bot server mein join ho gaya!');
 
+    // Sirf ek baar Login command bhejega (No Spam)
     setTimeout(() => {
-      bot.chat(`/register ${config.password} ${config.password}`);
       bot.chat(`/login ${config.password}`);
-    }, 2000);
+      console.log('Login command bhej di gayi hai.');
+    }, 2500);
 
+    // Anti-AFK Jump Loop
     setInterval(() => {
       bot.setControlState('jump', true);
       setTimeout(() => bot.setControlState('jump', false), 500);
     }, 30000);
   });
 
+  // GUI Menu Handlers (Lifesteal / Red Dye auto click)
   bot.on('windowOpen', async (window) => {
-    console.log('GUI Menu open ho gaya, Lifesteal search kar raha hoon...');
+    console.log('GUI Menu open ho gaya, Lifesteal (Red Dye) search kar raha hoon...');
     
     setTimeout(async () => {
       const items = window.items();
@@ -56,17 +60,18 @@ function createBot() {
           console.log('Click error:', err);
         }
       } else {
-        console.log('Red Dye nahi mila, manual slot click try kar rahe hain...');
+        console.log('Red Dye nahi mila, inventory slots check kar rahe hain...');
       }
     }, 1500);
   });
 
+  // Chat listener for auto-login prompt
   bot.on('message', (message) => {
     const msg = message.toString().toLowerCase();
-    if (msg.includes('/login')) {
-      bot.chat(`/login ${config.password}`);
-    } else if (msg.includes('/register')) {
-      bot.chat(`/register ${config.password} ${config.password}`);
+    if (msg.includes('/login') && !msg.includes('successfully')) {
+      setTimeout(() => {
+        bot.chat(`/login ${config.password}`);
+      }, 1000);
     }
   });
 
