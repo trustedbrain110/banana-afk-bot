@@ -3,12 +3,12 @@ const express = require('express');
 const { SocksClient } = require('socks');
 const config = require('./config.json');
 
-// --- WEBSHARE PROXY DETAILS ---
-const PROXY_HOST = '31.59.20.176';
-const PROXY_PORT = 6754;
+// --- WEBSHARE PROXY DETAILS (UK IP) ---
+const PROXY_HOST = '45.38.107.97';
+const PROXY_PORT = 6014;
 const PROXY_USER = 'wmexdmhl';
 const PROXY_PASS = '83taok1zi5rx';
-// ------------------------------
+// ------------------------------------
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -28,7 +28,7 @@ function createBot() {
     proxy: {
       host: PROXY_HOST,
       port: parseInt(PROXY_PORT),
-      type: 5
+      type: 5 // SOCKS5 Protocol
     },
     destination: {
       host: config.serverHost,
@@ -63,11 +63,13 @@ function createBot() {
     bot.on('spawn', () => {
       console.log('Bot successfully Banana SMP server mein join ho gaya!');
 
+      // Login command
       setTimeout(() => {
         bot.chat(`/login ${config.password}`);
         console.log('Login command bhej di gayi hai.');
       }, 3500);
 
+      // Anti-AFK Jump Loop
       setInterval(() => {
         if (bot && bot.entity) {
           bot.setControlState('jump', true);
@@ -76,6 +78,7 @@ function createBot() {
       }, 30000);
     });
 
+    // GUI Menu Auto-Clicker
     bot.on('windowOpen', async (window) => {
       console.log('GUI Menu open hua, Lifesteal (Red Dye) search kar raha hoon...');
       
