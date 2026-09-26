@@ -3,13 +3,12 @@ const express = require('express');
 const { SocksClient } = require('socks');
 const config = require('./config.json');
 
-// --- PROXY CONFIGURATION ---
-// Yahan apni SOCKS5 proxy details dalein:
-const PROXY_HOST = 'YOUR_PROXY_IP';       // Example: '185.220.101.5'
-const PROXY_PORT = 1080;                   // Example: 1080
-const PROXY_USER = 'YOUR_PROXY_USERNAME'; // Leave empty '' if no auth needed
-const PROXY_PASS = 'YOUR_PROXY_PASSWORD'; // Leave empty '' if no auth needed
-// ---------------------------
+// --- WEBSHARE PROXY DETAILS ---
+const PROXY_HOST = '31.59.20.176';
+const PROXY_PORT = 6754;
+const PROXY_USER = 'wmexdmhl';
+const PROXY_PASS = '83taok1zi5rx';
+// ------------------------------
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,7 +42,6 @@ function createBot() {
     options.proxy.password = PROXY_PASS;
   }
 
-  // Create TCP connection through SOCKS5 Proxy
   SocksClient.createConnection(options, (err, info) => {
     if (err) {
       console.log('Proxy Connection Error:', err.message);
