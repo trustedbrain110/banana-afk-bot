@@ -2,7 +2,6 @@ const mineflayer = require('mineflayer');
 const express = require('express');
 const config = require('./config.json');
 
-// Express Server
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -23,21 +22,19 @@ function createBot() {
     username: config.botUsername,
     version: '1.20.1',
     checkTimeoutInterval: 60 * 1000,
-    // Anti-VPN / Anti-Proxy bypass headers
-    fakeHost: config.serverHost,
-    brand: 'vanilla'
+    fakeHost: 'play.bananasmp.net',
+    brand: 'vanilla',
+    auth: 'offline'
   });
 
   bot.on('spawn', () => {
     console.log('Bot successfully Banana SMP server mein join ho gaya!');
 
-    // Login command
     setTimeout(() => {
       bot.chat(`/login ${config.password}`);
       console.log('Login command bhej di gayi hai.');
-    }, 3000);
+    }, 3500);
 
-    // Anti-AFK Jump Loop
     setInterval(() => {
       if (bot && bot.entity) {
         bot.setControlState('jump', true);
@@ -46,15 +43,14 @@ function createBot() {
     }, 30000);
   });
 
-  // GUI Auto Clicker for Lifesteal
   bot.on('windowOpen', async (window) => {
     console.log('GUI Menu open hua, Lifesteal (Red Dye) search kar raha hoon...');
     
     setTimeout(async () => {
       try {
         const items = window.items();
-        
         let targetSlot = -1;
+
         for (const item of items) {
           if (item && item.name) {
             const name = item.name.toLowerCase();
@@ -72,7 +68,7 @@ function createBot() {
           await bot.clickWindow(targetSlot, 0, 0);
           console.log('Lifesteal join click ho gaya!');
         } else {
-          console.log('Red dye automatic nahi mila, middle slot click try kar rahe hain...');
+          console.log('Red dye nahi mila, slot 13 click kar rahe hain...');
           if (items.length > 0) {
             await bot.clickWindow(13, 0, 0);
           }
